@@ -21,6 +21,52 @@ html, body {
   font-family: Arial;
 }
 
+.circle {
+  width: 50px;
+  height: 50px;
+  border: 2px solid white;
+  border-radius: 50%;
+  position: relative;
+  margin: 0 auto;
+  animation: pulse 2s infinite;
+}
+
+.circle::after {
+  content: "";
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  width: 26px;
+  height: 26px;
+  background: rgba(255,255,255,0.2);
+  border-radius: 50%;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.1); opacity: 0.7; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.line {
+  width: 2px;
+  height: 40px;
+  background: rgba(255,255,255,0.7);
+  margin: 0 auto;
+}
+
+.card {
+  background: rgba(255,255,255,0.15);
+  backdrop-filter: blur(12px);
+  color: white;
+  padding: 8px 16px;
+  border-radius: 12px;
+  text-align: center;
+  margin-top: 5px;
+  font-size: 14px;
+  border: 1px solid rgba(255,255,255,0.3);
+}
+
 /* ===== 2D UI ===== */
 #arUI {
   position: fixed;
