@@ -185,12 +185,14 @@ arUI.style.top = `${y}px`;
 
 // Если точка в верхней части экрана
 if (y < window.innerHeight / 2) {
-  // табличка над точкой
-  arUI.style.transform = "translate(-50%, -120%)";
+  // Точка в верхней части → карточка над точкой
+  arUI.classList.add("up");
 } else {
-  // табличка под точкой
-  arUI.style.transform = "translate(-50%, 20px)";
+  // Точка в нижней части → карточка под точкой
+  arUI.classList.remove("up");
 }
+
+arUI.style.transform = "translate(-50%, -50%)";
   }
 });
 
