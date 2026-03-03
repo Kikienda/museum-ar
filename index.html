@@ -70,46 +70,45 @@ html, body {
 
   <a-entity id="target" mindar-image-target="targetIndex: 0">
 
-    <!-- Белый внешний круг -->
+    <!-- ===== КРУГ ===== -->
     <a-ring
       position="0 0 0.1"
-      radius-inner="0.07"
-      radius-outer="0.1"
+      radius-inner="0.06"
+      radius-outer="0.09"
       color="white">
     </a-ring>
 
-    <!-- Прозрачный центр (визуальный эффект) -->
     <a-circle
       position="0 0 0.11"
-      radius="0.07"
+      radius="0.06"
       color="black"
-      opacity="0.3">
+      opacity="0.25">
     </a-circle>
 
-    <!-- Линия -->
+    <!-- ===== ЛИНИЯ ВВЕРХ ===== -->
     <a-box
-      position="0.25 0 0.1"
-      width="0.5"
-      height="0.01"
+      position="0 0.18 0.1"
+      width="0.01"
+      height="0.25"
       depth="0.01"
       color="white">
     </a-box>
 
-    <!-- Табличка -->
+    <!-- ===== ТАБЛИЧКА СВЕРХУ ===== -->
     <a-plane
       id="infoCard"
-      position="0.6 0 0.1"
-      width="0.7"
-      height="0.3"
+      position="0 0.35 0.1"
+      width="0.9"
+      height="0.35"
       color="white">
     </a-plane>
 
     <a-text
       value="Краткая информация"
-      position="0.6 0 0.11"
+      position="0 0.35 0.11"
       color="black"
       align="center"
-      width="1">
+      width="1.4">
     </a-text>
 
   </a-entity>
@@ -119,7 +118,6 @@ html, body {
 <script>
 const modal = document.getElementById("modal");
 const closeBtn = document.getElementById("closeBtn");
-
 const card = document.querySelector("#infoCard");
 
 card.addEventListener("touchstart", function(e){
