@@ -21,6 +21,15 @@ html, body {
   font-family: Arial;
 }
 
+/* ===== 2D UI ===== */
+#arUI {
+  position: fixed;
+  display: none;
+  z-index: 10;
+  pointer-events: auto;
+}
+
+/* Круг */
 .circle {
   width: 50px;
   height: 50px;
@@ -48,6 +57,7 @@ html, body {
   100% { transform: scale(1); opacity: 1; }
 }
 
+/* Линия */
 .line {
   width: 2px;
   height: 40px;
@@ -55,6 +65,7 @@ html, body {
   margin: 0 auto;
 }
 
+/* Табличка */
 .card {
   background: rgba(255,255,255,0.15);
   backdrop-filter: blur(12px);
@@ -65,14 +76,6 @@ html, body {
   margin-top: 5px;
   font-size: 14px;
   border: 1px solid rgba(255,255,255,0.3);
-}
-
-/* ===== 2D UI ===== */
-#arUI {
-  position: fixed;
-  display: none;
-  z-index: 10;
-  pointer-events: auto;
 }
 
 /* Модальное окно */
@@ -98,22 +101,6 @@ html, body {
   border: none;
   border-radius: 8px;
 }
-
-#arUI {
-  position: fixed;
-  display: none;
-  z-index: 10;
-  pointer-events: auto;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  transition: all 0.2s ease;
-}
-
-.up {
-  flex-direction: column-reverse;
-}
-
 </style>
 </head>
 
@@ -140,7 +127,6 @@ html, body {
   <a-camera id="camera" position="0 0 0" look-controls="enabled: false"></a-camera>
 
   <a-entity id="target" mindar-image-target="targetIndex: 0">
-    <!-- Невидимая точка-якорь -->
     <a-entity id="anchorPoint" position="0 0 0"></a-entity>
   </a-entity>
 
@@ -157,10 +143,12 @@ const openCard = document.getElementById("openCard");
 
 let isTracking = false;
 
+// Старт — скрываем
 arUI.style.display = "none";
+
 target.addEventListener("targetFound", () => {
   isTracking = true;
-  arUI.style.display = "flex";
+  arUI.style.display = "block";
 });
 
 target.addEventListener("targetLost", () => {
@@ -169,7 +157,7 @@ target.addEventListener("targetLost", () => {
   modal.style.display = "none";
 });
 
-// Обновление позиции каждый кадр
+// Обновление позиции
 AFRAME.registerComponent("ui-follow", {
   tick: function () {
     if (!isTracking) return;
@@ -182,18 +170,16 @@ AFRAME.registerComponent("ui-follow", {
     const y = (-vector.y * 0.5 + 0.5) * window.innerHeight;
 
     arUI.style.left = `${x}px`;
-arUI.style.top = `${y}px`;
+    arUI.style.top = `${y}px`;
 
-// Если точка в верхней части экрана
-if (y < window.innerHeight / 2) {
-  // Точка в верхней части → карточка над точкой
-  arUI.classList.add("up");
-} else {
-  // Точка в нижней части → карточка под точкой
-  arUI.classList.remove("up");
-}
-
-arUI.style.transform = "translate(-50%, -50%)";
+    // Верхняя половина экрана → карточка выше точки
+    if (y < window.innerHeight / 2) {
+      arUI.style.transform = "translate(-50%, -120%)";
+    } 
+    // Нижняя половина → карточка ниже точки
+    else {
+      arUI.style.transform = "translate(-50%, 20px)";
+    }
   }
 });
 
