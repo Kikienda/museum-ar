@@ -170,14 +170,14 @@ AFRAME.registerComponent("ui-follow", {
     const y = (-vector.y * 0.5 + 0.5) * window.innerHeight;
 
     arUI.style.left = `${x}px`;
-    arUI.style.top = `${y}px`;
+      arUI.style.top = `${y}px`;
 
-    // Верхняя половина экрана → карточка выше точки
-    if (y > window.innerHeight / 2) {
-        // Точка в нижней части экрана → карточка выше точки
+      // ВАЖНО: проверяем наоборот
+      if (y < window.innerHeight / 2) {
+        // Точка визуально сверху → карточка НАД точкой
         arUI.style.transform = "translate(-50%, -120%)";
       } else {
-        // Точка в верхней части → карточка ниже точки
+        // Точка визуально снизу → карточка ПОД точкой
         arUI.style.transform = "translate(-50%, 20px)";
       }
   }
