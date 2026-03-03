@@ -157,15 +157,16 @@ const openCard = document.getElementById("openCard");
 
 let isTracking = false;
 
+arUI.style.display = "none";
 target.addEventListener("targetFound", () => {
-  arUI.style.display = "block";
   isTracking = true;
+  arUI.style.display = "flex";
 });
 
 target.addEventListener("targetLost", () => {
+  isTracking = false;
   arUI.style.display = "none";
   modal.style.display = "none";
-  isTracking = false;
 });
 
 // Обновление позиции каждый кадр
