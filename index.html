@@ -180,14 +180,16 @@ AFRAME.registerComponent("ui-follow", {
     const y = (-vector.y * 0.5 + 0.5) * window.innerHeight;
 
     arUI.style.left = `${x}px`;
-    arUI.style.top = `${y}px`;
+      arUI.style.top = `${y}px`;
 
-    // Если точка в верхней половине → карточка НАД точкой
-    if (y < window.innerHeight / 2) {
-      arUI.classList.add("up");
-    } else {
-      arUI.classList.remove("up");
-    }
+      // Проверяем реальную высоту точки относительно камеры
+      if (vector.y > 0) {
+        // Точка выше центра камеры → карточка НАД точкой
+        arUI.style.transform = "translate(-50%, -120%)";
+      } else {
+        // Точка ниже центра → карточка ПОД точкой
+        arUI.style.transform = "translate(-50%, 20px)";
+      }
   }
 });
 
