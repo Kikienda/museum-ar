@@ -21,14 +21,12 @@ html, body {
   font-family: Arial;
 }
 
-/* 2D AR UI */
+/* ===== 2D UI ===== */
 #arUI {
   position: fixed;
-  top: 45%;
-  left: 50%;
-  transform: translate(-50%, -50%);
   display: none;
   z-index: 10;
+  pointer-events: auto;
 }
 
 /* Круг */
@@ -64,14 +62,14 @@ html, body {
 .card {
   background: white;
   color: black;
-  padding: 10px 15px;
+  padding: 8px 14px;
   border-radius: 8px;
   text-align: center;
   margin-top: 5px;
   font-size: 14px;
 }
 
-/* Полноэкранный модал */
+/* Модальное окно */
 #modal {
   position: fixed;
   top: 0;
@@ -99,22 +97,15 @@ html, body {
 
 <body>
 
-<!-- 2D AR UI -->
 <div id="arUI">
   <div class="circle"></div>
   <div class="line"></div>
-  <div class="card" id="openCard">
-    Краткая информация
-  </div>
+  <div class="card" id="openCard">Краткая информация</div>
 </div>
 
-<!-- Полный справочник -->
 <div id="modal">
   <h2>Экспонат 1925 года</h2>
-  <p>
-    Историческая фотография.  
-    Полный текст справочника, описание, даты, события.
-  </p>
+  <p>Полный текст справочника, описание и факты.</p>
   <button id="closeBtn">Закрыть</button>
 </div>
 
@@ -124,27 +115,56 @@ html, body {
   vr-mode-ui="enabled: false"
   device-orientation-permission-ui="enabled: false">
 
-  <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
+  <a-camera id="camera" position="0 0 0" look-controls="enabled: false"></a-camera>
 
-  <a-entity id="target" mindar-image-target="targetIndex: 0"></a-entity>
+  <a-entity id="target" mindar-image-target="targetIndex: 0">
+    <!-- Невидимая точка-якорь -->
+    <a-entity id="anchorPoint" position="0 0 0"></a-entity>
+  </a-entity>
 
 </a-scene>
 
 <script>
 const arUI = document.getElementById("arUI");
 const target = document.getElementById("target");
+const anchor = document.getElementById("anchorPoint");
+const camera = document.getElementById("camera");
 const modal = document.getElementById("modal");
 const closeBtn = document.getElementById("closeBtn");
 const openCard = document.getElementById("openCard");
 
+let isTracking = false;
+
 target.addEventListener("targetFound", () => {
   arUI.style.display = "block";
+  isTracking = true;
 });
 
 target.addEventListener("targetLost", () => {
   arUI.style.display = "none";
   modal.style.display = "none";
+  isTracking = false;
 });
+
+// Обновление позиции каждый кадр
+AFRAME.registerComponent("ui-follow", {
+  tick: function () {
+    if (!isTracking) return;
+
+    const vector = new THREE.Vector3();
+    anchor.object3D.getWorldPosition(vector);
+    vector.project(camera.getObject3D("camera"));
+
+    const x = (vector.x * 0.5 + 0.5) * window.innerWidth;
+    const y = (-vector.y * 0.5 + 0.5) * window.innerHeight;
+
+    arUI.style.left = `${x}px`;
+    arUI.style.top = `${y}px`;
+    arUI.style.transform = "translate(-50%, -100%)";
+  }
+});
+
+anchor.setAttribute("ui-follow", "");
 
 openCard.addEventListener("click", () => {
   modal.style.display = "block";
