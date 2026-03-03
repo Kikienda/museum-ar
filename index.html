@@ -31,6 +31,7 @@ html, body {
   display: flex;
   flex-direction: column;
   align-items: center;
+  transition: left 0.1s linear, top 0.1s linear;
 }
 
 /* Круг */
@@ -40,7 +41,6 @@ html, body {
   border: 2px solid white;
   border-radius: 50%;
   position: relative;
-  margin: 0 auto;
 }
 
 .circle::after {
@@ -71,11 +71,6 @@ html, body {
   font-size: 14px;
   border: 1px solid rgba(255,255,255,0.3);
   margin-top: 5px;
-}
-
-/* Если точка сверху — карточка вверх */
-.up {
-  flex-direction: column-reverse;
 }
 
 /* Модалка */
@@ -118,7 +113,8 @@ html, body {
   <a-camera id="camera" position="0 0 0" look-controls="enabled: false"></a-camera>
 
   <a-entity id="target" mindar-image-target="targetIndex: 0">
-    <a-entity id="anchorPoint" position="0 0 0"></a-entity>
+    <!-- Точка ВСЕГДА внизу экспоната -->
+    <a-entity id="anchorPoint" position="0 -0.4 0"></a-entity>
   </a-entity>
 
 </a-scene>
@@ -150,25 +146,6 @@ AFRAME.registerComponent("ui-follow", {
   tick: function () {
     if (!isTracking) return;
 
-    // Получаем позицию target относительно камеры
-    const targetPos = new THREE.Vector3();
-    target.object3D.getWorldPosition(targetPos);
-
-    const cameraPos = new THREE.Vector3();
-    camera.object3D.getWorldPosition(cameraPos);
-
-    // === ЛОГИКА ТОЧКИ ===
-    if (targetPos.y > cameraPos.y) {
-      // Экспонат выше → точка снизу
-      anchor.object3D.position.y = -0.4;
-      arUI.classList.remove("up");
-    } else {
-      // Экспонат ниже → точка сверху
-      anchor.object3D.position.y = 0.4;
-      arUI.classList.add("up");
-    }
-
-    // === Проекция на экран ===
     const screenVector = new THREE.Vector3();
     anchor.object3D.getWorldPosition(screenVector);
     screenVector.project(camera.getObject3D("camera"));
