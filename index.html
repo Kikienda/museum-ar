@@ -27,6 +27,7 @@ html, body {
   display: none;
   z-index: 10;
   pointer-events: auto;
+  transform: translate(-50%, -50%);
 }
 
 /* Круг */
@@ -76,6 +77,17 @@ html, body {
   margin-top: 5px;
   font-size: 14px;
   border: 1px solid rgba(255,255,255,0.3);
+}
+
+/* Переворот направления */
+.up .line {
+  order: -1;
+  transform: scaleY(-1);
+}
+
+.up .card {
+  order: -2;
+  margin-bottom: 5px;
 }
 
 /* Модальное окно */
@@ -143,7 +155,6 @@ const openCard = document.getElementById("openCard");
 
 let isTracking = false;
 
-// Старт — скрываем
 arUI.style.display = "none";
 
 target.addEventListener("targetFound", () => {
@@ -157,7 +168,6 @@ target.addEventListener("targetLost", () => {
   modal.style.display = "none";
 });
 
-// Обновление позиции
 AFRAME.registerComponent("ui-follow", {
   tick: function () {
     if (!isTracking) return;
@@ -170,16 +180,14 @@ AFRAME.registerComponent("ui-follow", {
     const y = (-vector.y * 0.5 + 0.5) * window.innerHeight;
 
     arUI.style.left = `${x}px`;
-      arUI.style.top = `${y}px`;
+    arUI.style.top = `${y}px`;
 
-      // ВАЖНО: проверяем наоборот
-      if (y < window.innerHeight / 2) {
-        // Точка визуально сверху → карточка НАД точкой
-        arUI.style.transform = "translate(-50%, -120%)";
-      } else {
-        // Точка визуально снизу → карточка ПОД точкой
-        arUI.style.transform = "translate(-50%, 20px)";
-      }
+    // Если точка в верхней половине → карточка НАД точкой
+    if (y < window.innerHeight / 2) {
+      arUI.classList.add("up");
+    } else {
+      arUI.classList.remove("up");
+    }
   }
 });
 
