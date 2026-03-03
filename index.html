@@ -173,13 +173,13 @@ AFRAME.registerComponent("ui-follow", {
     arUI.style.top = `${y}px`;
 
     // Верхняя половина экрана → карточка выше точки
-    if (y < window.innerHeight / 2) {
-      arUI.style.transform = "translate(-50%, -120%)";
-    } 
-    // Нижняя половина → карточка ниже точки
-    else {
-      arUI.style.transform = "translate(-50%, 20px)";
-    }
+    if (y > window.innerHeight / 2) {
+        // Точка в нижней части экрана → карточка выше точки
+        arUI.style.transform = "translate(-50%, -120%)";
+      } else {
+        // Точка в верхней части → карточка ниже точки
+        arUI.style.transform = "translate(-50%, 20px)";
+      }
   }
 });
 
