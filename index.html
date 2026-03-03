@@ -165,8 +165,16 @@ AFRAME.registerComponent("ui-follow", {
     const y = (-vector.y * 0.5 + 0.5) * window.innerHeight;
 
     arUI.style.left = `${x}px`;
-    arUI.style.top = `${y}px`;
-    arUI.style.transform = "translate(-50%, -100%)";
+arUI.style.top = `${y}px`;
+
+// Если точка в верхней половине экрана
+if (y < window.innerHeight / 2) {
+  // табличка вниз
+  arUI.style.transform = "translate(-50%, 20px)";
+} else {
+  // табличка вверх
+  arUI.style.transform = "translate(-50%, -120%)";
+}
   }
 });
 
