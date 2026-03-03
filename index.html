@@ -30,24 +30,16 @@
   vr-mode-ui="enabled: false"
   device-orientation-permission-ui="enabled: false">
 
-  <!-- Камера с правильным курсором -->
-  <a-camera position="0 0 0" look-controls="enabled: false">
-    <a-cursor
-      rayOrigin="entity"
-      raycaster="objects: .clickable"
-      fuse="false">
-    </a-cursor>
-  </a-camera>
+  <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
 
   <a-entity mindar-image-target="targetIndex: 0">
 
-    <!-- Кликабельная точка -->
+    <!-- Точка -->
     <a-sphere 
       id="infoPoint"
       position="0 0 0.1"
-      radius="0.09"
-      color="red"
-      class="clickable">
+      radius="0.1"
+      color="red">
     </a-sphere>
 
     <!-- Панель -->
@@ -80,10 +72,15 @@ document.addEventListener("DOMContentLoaded", function () {
   const point = document.querySelector("#infoPoint");
   const panel = document.querySelector("#infoPanel");
 
-  point.addEventListener("click", function () {
-    const visible = panel.getAttribute("visible");
-    panel.setAttribute("visible", !visible);
+  let isOpen = false;
+
+  // Для Safari на iPhone
+  point.addEventListener("touchstart", function (e) {
+    e.preventDefault();
+    isOpen = !isOpen;
+    panel.setAttribute("visible", isOpen);
   });
+
 });
 </script>
 
