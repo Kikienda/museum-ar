@@ -21,35 +21,26 @@
       height: 100%;
       background: black;
     }
-
-    a-scene {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-    }
   </style>
 </head>
 
 <body>
 
 <a-scene
+  embedded
   mindar-image="imageTargetSrc: targets.mind;"
   color-space="sRGB"
-  renderer="colorManagement: true, physicallyCorrectLights"
+  renderer="colorManagement: true"
   vr-mode-ui="enabled: false"
   device-orientation-permission-ui="enabled: false"
   cursor="rayOrigin: mouse"
   raycaster="objects: .clickable">
 
-  <!-- Камера -->
   <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
 
-  <!-- Target -->
   <a-entity mindar-image-target="targetIndex: 0">
 
-    <!-- Кликабельная точка -->
+    <!-- Точка -->
     <a-sphere 
       id="infoPoint"
       position="0 0 0.1"
@@ -59,7 +50,7 @@
       animation="property: scale; to: 1.2 1.2 1.2; dir: alternate; dur: 800; loop: true">
     </a-sphere>
 
-    <!-- Панель справочника -->
+    <!-- Панель -->
     <a-entity id="infoPanel" visible="false">
 
       <a-plane 
@@ -71,7 +62,7 @@
       </a-plane>
 
       <a-text
-        value="Экспонат 1925 года.\nИсторическая фотография.\n\nНажмите ещё раз на точку,\nчтобы закрыть справочник."
+        value="Экспонат 1925 года.\nИсторическая фотография.\n\nНажмите ещё раз для закрытия."
         position="0 0.5 0.01"
         color="yellow"
         align="center"
