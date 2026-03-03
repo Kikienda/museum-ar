@@ -28,11 +28,11 @@
   embedded
   mindar-image="imageTargetSrc: targets.mind;"
   vr-mode-ui="enabled: false"
-  device-orientation-permission-ui="enabled: false">
+  device-orientation-permission-ui="enabled: false"
+  cursor="rayOrigin: mouse"
+  raycaster="objects: .clickable">
 
-  <a-camera position="0 0 0" look-controls="enabled: false">
-    <a-cursor fuse="false" rayOrigin="mouse"></a-cursor>
-  </a-camera>
+  <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
 
   <a-entity mindar-image-target="targetIndex: 0">
 
@@ -40,8 +40,9 @@
     <a-sphere 
       id="infoPoint"
       position="0 0 0.1"
-      radius="0.07"
-      color="red">
+      radius="0.08"
+      color="red"
+      class="clickable">
     </a-sphere>
 
     <!-- Панель -->
