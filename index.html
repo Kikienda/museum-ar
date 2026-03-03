@@ -24,11 +24,10 @@ html, body {
 /* ===== 2D UI ===== */
 #arUI {
   position: fixed;
-  display: none;
+  display: none; /* ВАЖНО — только none */
   z-index: 10;
   pointer-events: auto;
   transform: translate(-50%, -50%);
-  display: flex;
   flex-direction: column;
   align-items: center;
   transition: left 0.1s linear, top 0.1s linear;
@@ -113,7 +112,6 @@ html, body {
   <a-camera id="camera" position="0 0 0" look-controls="enabled: false"></a-camera>
 
   <a-entity id="target" mindar-image-target="targetIndex: 0">
-    <!-- Точка ВСЕГДА внизу экспоната -->
     <a-entity id="anchorPoint" position="0 -0.4 0"></a-entity>
   </a-entity>
 
@@ -131,7 +129,6 @@ const openCard = document.getElementById("openCard");
 
 let isTracking = false;
 
-// Компонент
 AFRAME.registerComponent("ui-follow", {
   tick: function () {
     if (!isTracking) return;
@@ -148,14 +145,12 @@ AFRAME.registerComponent("ui-follow", {
   }
 });
 
-// Показываем только при распознавании
 target.addEventListener("targetFound", () => {
   isTracking = true;
-  arUI.style.display = "flex";
+  arUI.style.display = "flex";  // включаем тут
   anchor.setAttribute("ui-follow", "");
 });
 
-// Полностью отключаем при потере
 target.addEventListener("targetLost", () => {
   isTracking = false;
   arUI.style.display = "none";
