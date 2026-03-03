@@ -167,13 +167,13 @@ AFRAME.registerComponent("ui-follow", {
     arUI.style.left = `${x}px`;
 arUI.style.top = `${y}px`;
 
-// Если точка в верхней половине экрана
+// Если точка в верхней части экрана
 if (y < window.innerHeight / 2) {
-  // табличка вниз
-  arUI.style.transform = "translate(-50%, 20px)";
-} else {
-  // табличка вверх
+  // табличка над точкой
   arUI.style.transform = "translate(-50%, -120%)";
+} else {
+  // табличка под точкой
+  arUI.style.transform = "translate(-50%, 20px)";
 }
   }
 });
