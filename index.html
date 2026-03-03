@@ -122,9 +122,15 @@ html, body {
 
   <a-camera id="camera" position="0 0 0" look-controls="enabled: false"></a-camera>
 
-  <a-entity id="target" mindar-image-target="targetIndex: 0">
-    <a-entity id="anchorPoint" position="0 -0.4 0"></a-entity>
-  </a-entity>
+        <!-- Экспонат 1 -->
+      <a-entity id="target1" mindar-image-target="targetIndex: 0">
+        <a-entity id="anchor1" position="0 -0.4 0"></a-entity>
+      </a-entity>
+
+      <!-- Экспонат 2 -->
+      <a-entity id="target2" mindar-image-target="targetIndex: 1">
+        <a-entity id="anchor2" position="0 -0.4 0"></a-entity>
+      </a-entity>
 
 </a-scene>
 
@@ -132,20 +138,31 @@ html, body {
 document.addEventListener("DOMContentLoaded", function() {
 
 const arUI = document.getElementById("arUI");
-const target = document.getElementById("target");
-const anchor = document.getElementById("anchorPoint");
 const camera = document.getElementById("camera");
 const modal = document.getElementById("modal");
 const openCard = document.getElementById("openCard");
+const backBtn = document.getElementById("backBtn");
 
+// Два таргета
+const target1 = document.getElementById("target1");
+const target2 = document.getElementById("target2");
+
+const anchor1 = document.getElementById("anchor1");
+const anchor2 = document.getElementById("anchor2");
+
+let activeAnchor = null;
 let isTracking = false;
+
+/* ===================== */
+/* FOLLOW COMPONENT */
+/* ===================== */
 
 AFRAME.registerComponent("ui-follow", {
   tick: function () {
-    if (!isTracking) return;
+    if (!isTracking || !activeAnchor) return;
 
     const screenVector = new THREE.Vector3();
-    anchor.object3D.getWorldPosition(screenVector);
+    activeAnchor.object3D.getWorldPosition(screenVector);
     screenVector.project(camera.getObject3D("camera"));
 
     const x = (screenVector.x * 0.5 + 0.5) * window.innerWidth;
@@ -156,28 +173,62 @@ AFRAME.registerComponent("ui-follow", {
   }
 });
 
-target.addEventListener("targetFound", () => {
+/* ===================== */
+/* TARGET 1 */
+/* ===================== */
+
+target1.addEventListener("targetFound", () => {
+  activeAnchor = anchor1;
   isTracking = true;
-  arUI.style.display = "flex";  // включаем тут
-  anchor.setAttribute("ui-follow", "");
+
+  arUI.style.display = "flex";
+  anchor1.setAttribute("ui-follow", "");
+
+  document.querySelector("#modal h2").innerText = "Экспонат 1925 года";
+  document.querySelector("#modal p").innerText =
+    "Описание первого экспоната. Исторические факты и информация.";
 });
 
-target.addEventListener("targetLost", () => {
+target1.addEventListener("targetLost", () => {
   isTracking = false;
   arUI.style.display = "none";
-  anchor.removeAttribute("ui-follow");
+  anchor1.removeAttribute("ui-follow");
 });
+
+/* ===================== */
+/* TARGET 2 */
+/* ===================== */
+
+target2.addEventListener("targetFound", () => {
+  activeAnchor = anchor2;
+  isTracking = true;
+
+  arUI.style.display = "flex";
+  anchor2.setAttribute("ui-follow", "");
+
+  document.querySelector("#modal h2").innerText = "Экспонат 1930 года";
+  document.querySelector("#modal p").innerText =
+    "Описание второго экспоната. Дополнительные исторические данные.";
+});
+
+target2.addEventListener("targetLost", () => {
+  isTracking = false;
+  arUI.style.display = "none";
+  anchor2.removeAttribute("ui-follow");
+});
+
+/* ===================== */
+/* UI */
+/* ===================== */
 
 openCard.addEventListener("click", () => {
   modal.style.display = "block";
 });
 
-});
-
-const backBtn = document.getElementById("backBtn");
-
 backBtn.addEventListener("click", () => {
   modal.style.display = "none";
+});
+
 });
 </script>
 
