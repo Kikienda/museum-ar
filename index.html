@@ -11,22 +11,133 @@
 <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.3/dist/mindar-image-aframe.prod.js"></script>
 
+<style>
+html, body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+  font-family: Arial;
+}
+
+/* ===== 2D UI ===== */
+#arUI {
+  position: fixed;
+  display: none;
+  z-index: 10;
+  pointer-events: auto;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Круг */
+.circle {
+  width: 50px;
+  height: 50px;
+  border: 2px solid white;
+  border-radius: 50%;
+  position: relative;
+  margin: 0 auto;
+}
+
+.circle::after {
+  content: "";
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  width: 26px;
+  height: 26px;
+  background: rgba(255,255,255,0.2);
+  border-radius: 50%;
+}
+
+/* Линия */
+.line {
+  width: 2px;
+  height: 40px;
+  background: rgba(255,255,255,0.7);
+}
+
+/* Табличка */
+.card {
+  background: rgba(255,255,255,0.15);
+  backdrop-filter: blur(12px);
+  color: white;
+  padding: 8px 16px;
+  border-radius: 12px;
+  font-size: 14px;
+  border: 1px solid rgba(255,255,255,0.3);
+  margin-top: 5px;
+}
+
+/* Если точка сверху — карточка вверх */
+.up {
+  flex-direction: column-reverse;
+}
+
+/* Модалка */
+#modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.95);
+  color: white;
+  display: none;
+  z-index: 20;
+  padding: 30px;
+  box-sizing: border-box;
+}
+</style>
+</head>
+
+<body>
+
+<div id="arUI">
+  <div class="circle"></div>
+  <div class="line"></div>
+  <div class="card" id="openCard">Краткая информация</div>
+</div>
+
+<div id="modal">
+  <h2>Экспонат 1925 года</h2>
+  <p>Полный текст справочника, описание и факты.</p>
+  <button onclick="modal.style.display='none'">Закрыть</button>
+</div>
+
+<a-scene
+  embedded
+  mindar-image="imageTargetSrc: targets.mind;"
+  vr-mode-ui="enabled: false"
+  device-orientation-permission-ui="enabled: false">
+
+  <a-camera id="camera" position="0 0 0" look-controls="enabled: false"></a-camera>
+
+  <a-entity id="target" mindar-image-target="targetIndex: 0">
+    <a-entity id="anchorPoint" position="0 0 0"></a-entity>
+  </a-entity>
+
+</a-scene>
+
 <script>
+document.addEventListener("DOMContentLoaded", function() {
+
 const arUI = document.getElementById("arUI");
 const target = document.getElementById("target");
 const anchor = document.getElementById("anchorPoint");
 const camera = document.getElementById("camera");
 const modal = document.getElementById("modal");
-const closeBtn = document.getElementById("closeBtn");
 const openCard = document.getElementById("openCard");
 
 let isTracking = false;
 
-arUI.style.display = "none";
-
 target.addEventListener("targetFound", () => {
   isTracking = true;
-  arUI.style.display = "block";
+  arUI.style.display = "flex";
 });
 
 target.addEventListener("targetLost", () => {
@@ -39,25 +150,25 @@ AFRAME.registerComponent("ui-follow", {
   tick: function () {
     if (!isTracking) return;
 
-    // === 1. Определяем положение экспоната относительно камеры ===
-    const worldPos = new THREE.Vector3();
-    anchor.object3D.getWorldPosition(worldPos);
+    // Получаем позицию target относительно камеры
+    const targetPos = new THREE.Vector3();
+    target.object3D.getWorldPosition(targetPos);
 
-    const cameraLocal = worldPos.clone();
-    camera.object3D.worldToLocal(cameraLocal);
+    const cameraPos = new THREE.Vector3();
+    camera.object3D.getWorldPosition(cameraPos);
 
-    // Если экспонат выше центра камеры
-    if (cameraLocal.y > 0) {
-      // Точка ставится внизу экспоната
+    // === ЛОГИКА ТОЧКИ ===
+    if (targetPos.y > cameraPos.y) {
+      // Экспонат выше → точка снизу
       anchor.object3D.position.y = -0.4;
-      arUI.classList.remove("up"); // табличка вниз
+      arUI.classList.remove("up");
     } else {
-      // Точка ставится вверху экспоната
+      // Экспонат ниже → точка сверху
       anchor.object3D.position.y = 0.4;
-      arUI.classList.add("up"); // табличка вверх
+      arUI.classList.add("up");
     }
 
-    // === 2. Проекция на экран ===
+    // === Проекция на экран ===
     const screenVector = new THREE.Vector3();
     anchor.object3D.getWorldPosition(screenVector);
     screenVector.project(camera.getObject3D("camera"));
@@ -76,97 +187,6 @@ openCard.addEventListener("click", () => {
   modal.style.display = "block";
 });
 
-closeBtn.addEventListener("click", () => {
-  modal.style.display = "none";
-});
-</script>
-</head>
-
-<body>
-
-<div id="arUI">
-  <div class="circle"></div>
-  <div class="line"></div>
-  <div class="card" id="openCard">Краткая информация</div>
-</div>
-
-<div id="modal">
-  <h2>Экспонат 1925 года</h2>
-  <p>Полный текст справочника, описание и факты.</p>
-  <button id="closeBtn">Закрыть</button>
-</div>
-
-<a-scene
-  embedded
-  mindar-image="imageTargetSrc: targets.mind;"
-  vr-mode-ui="enabled: false"
-  device-orientation-permission-ui="enabled: false">
-
-  <a-camera id="camera" position="0 0 0" look-controls="enabled: false"></a-camera>
-
-  <a-entity id="target" mindar-image-target="targetIndex: 0">
-    <a-entity id="anchorPoint" position="0 0 0"></a-entity>
-  </a-entity>
-
-</a-scene>
-
-<script>
-const arUI = document.getElementById("arUI");
-const target = document.getElementById("target");
-const anchor = document.getElementById("anchorPoint");
-const camera = document.getElementById("camera");
-const modal = document.getElementById("modal");
-const closeBtn = document.getElementById("closeBtn");
-const openCard = document.getElementById("openCard");
-
-let isTracking = false;
-
-arUI.style.display = "none";
-
-target.addEventListener("targetFound", () => {
-  isTracking = true;
-  arUI.style.display = "block";
-});
-
-target.addEventListener("targetLost", () => {
-  isTracking = false;
-  arUI.style.display = "none";
-  modal.style.display = "none";
-});
-
-AFRAME.registerComponent("ui-follow", {
-  tick: function () {
-    if (!isTracking) return;
-
-    const vector = new THREE.Vector3();
-    anchor.object3D.getWorldPosition(vector);
-    vector.project(camera.getObject3D("camera"));
-
-    const x = (vector.x * 0.5 + 0.5) * window.innerWidth;
-    const y = (-vector.y * 0.5 + 0.5) * window.innerHeight;
-
-    arUI.style.left = `${x}px`;
-      arUI.style.top = `${y}px`;
-
-      // Проверяем реальную высоту точки относительно камеры
-      if (vector.y > 0) {
-        // Точка выше центра камеры → карточка НАД точкой
-        arUI.style.transform = "translate(-50%, -120%)";
-      } else {
-        // Точка ниже центра → карточка ПОД точкой
-        arUI.style.transform = "translate(-50%, 20px)";
-      }
-  }
-});
-
-anchor.setAttribute("ui-follow", "");
-
-openCard.addEventListener("click", () => {
-  modal.style.display = "block";
-});
-
-closeBtn.addEventListener("click", () => {
-  modal.style.display = "none";
 });
 </script>
 
