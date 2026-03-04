@@ -436,22 +436,28 @@ const years = document.querySelectorAll(".yearBlock");
 modal.addEventListener("scroll", ()=>{
 
 let currentYear = 1925;
-let percent = 0;
 
-years.forEach((block,index)=>{
+years.forEach((block)=>{
 
 const rect = block.getBoundingClientRect();
 
 if(rect.top < window.innerHeight * 0.6){
-
 currentYear = block.dataset.year;
-percent = index / (years.length);
-
 }
 
 });
 
 yearLabel.innerText = currentYear;
+
+
+/* плавное движение таймлайна */
+
+const scrollTop = modal.scrollTop;
+const maxScroll = modal.scrollHeight - modal.clientHeight;
+
+let percent = scrollTop / maxScroll;
+
+if(!isFinite(percent)) percent = 0;
 
 dot.style.left = percent * 100 + "%";
 progress.style.width = percent * 100 + "%";
