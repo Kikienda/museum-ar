@@ -340,7 +340,18 @@ width:80px;
 
 <div id="timelineBar">
 
+<div id="timelineProgress"></div>
+<div id="timelineDot"></div>
+
+</div>
+
+</div>
+
 <div id="content">
+
+</div>
+
+</div>
 
 <h1 class="modalTitle">Хронология КВПК</h1>
 
@@ -444,45 +455,6 @@ percent = index / (years.length);
 });
 
 yearLabel.innerText = currentYear;
-
-dot.style.left = percent * 100 + "%";
-progress.style.width = percent * 100 + "%";
-
-});
-
-const points = document.querySelectorAll(".yearPoint");
-
-modal.addEventListener("scroll", ()=>{
-
-let currentYear = 1925;
-
-points.forEach(point=>{
-const rect = point.getBoundingClientRect();
-
-if(rect.top < window.innerHeight * 0.4){
-currentYear = point.dataset.year;
-}
-});
-
-yearLabel.innerText = currentYear;
-
-});
-
-const startYear = 1925;
-const endYear = 2023;
-
-modal.addEventListener("scroll", ()=>{
-
-const scrollTop = modal.scrollTop;
-const maxScroll = modal.scrollHeight - modal.clientHeight;
-
-let percent = scrollTop / maxScroll;
-
-if(!isFinite(percent)) percent = 0;
-
-const year = Math.round(startYear + percent * (endYear - startYear));
-
-yearLabel.innerText = year;
 
 dot.style.left = percent * 100 + "%";
 progress.style.width = percent * 100 + "%";
