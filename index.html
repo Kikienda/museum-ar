@@ -229,26 +229,23 @@ align-items:center;
 justify-content:center;
 }
 
-#timeline::after{
-content:"";
-position:absolute;
-left:0;
+#blurLayer{
+position:fixed;
 top:0;
+left:0;
 width:100%;
-height:70px;
-
-backdrop-filter: blur(12px);
--webkit-backdrop-filter: blur(12px);
+height:140px;
 
 mask-image: linear-gradient(
 to bottom,
 black 0%,
-black 25%,
-rgba(0,0,0,0.6) 50%,
+black 30%,
+rgba(0,0,0,0.6) 60%,
 transparent 100%
 );
 
 pointer-events:none;
+z-index:40;
 }
 
 /* Год */
@@ -362,6 +359,8 @@ width:80px;
 </div>
 
 </div>
+
+<div id="blurLayer"></div>
 
 <div id="content">
 
