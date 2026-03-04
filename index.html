@@ -192,11 +192,88 @@ html, body {
   text-align: center;
   line-height: 1.4;
 }
+
+/* ===== Timeline ===== */
+
+#timeline{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:70px;
+
+background:rgba(0,0,0,0.7);
+backdrop-filter:blur(10px);
+
+z-index:50;
+
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
+}
+
+/* Год */
+
+#yearLabel{
+color:white;
+font-size:18px;
+margin-bottom:6px;
+}
+
+/* Линия */
+
+#timelineBar{
+position:relative;
+width:80%;
+height:4px;
+background:rgba(255,255,255,0.2);
+border-radius:3px;
+}
+
+/* Прогресс */
+
+#timelineProgress{
+position:absolute;
+height:4px;
+background:white;
+width:0%;
+border-radius:3px;
+}
+
+/* Точка */
+
+#timelineDot{
+position:absolute;
+top:-6px;
+
+width:16px;
+height:16px;
+
+background:white;
+border-radius:50%;
+
+box-shadow:0 0 10px rgba(255,255,255,0.8);
+
+left:0%;
+transform:translateX(-50%);
+}
       
 </style>
 </head>
 
 <body>
+
+<div id="timeline">
+
+<div id="yearLabel">1925</div>
+
+<div id="timelineBar">
+<div id="timelineProgress"></div>
+<div id="timelineDot"></div>
+</div>
+
+</div>
 
 <div id="arUI">
   <div class="circle"></div>
@@ -240,6 +317,30 @@ html, body {
 </a-scene>
 
 <script>
+
+const startYear = 1925;
+const endYear = 2023;
+
+const dot = document.getElementById("timelineDot");
+const progress = document.getElementById("timelineProgress");
+const yearLabel = document.getElementById("yearLabel");
+
+window.addEventListener("scroll", ()=>{
+
+const scrollTop = window.scrollY;
+const maxScroll = document.body.scrollHeight - window.innerHeight;
+
+const percent = scrollTop / maxScroll;
+
+const year = Math.round(startYear + percent * (endYear - startYear));
+
+yearLabel.innerText = year;
+
+dot.style.left = percent * 100 + "%";
+progress.style.width = percent * 100 + "%";
+
+});
+      
 document.addEventListener("DOMContentLoaded", function() {
 
 const arUI = document.getElementById("arUI");
