@@ -147,9 +147,7 @@ overflow-x:hidden;
 }
 
 #backBtn{
-position:absolute;
-left:15px;
-top:18px;
+position:relative;
 
 font-size:16px;
 cursor:pointer;
@@ -158,8 +156,6 @@ padding:8px 14px;
 
 background:rgba(255,255,255,0.15);
 border-radius:10px;
-
-z-index:100;
 }
 
 /* ===== Заголовок ===== */
@@ -302,6 +298,20 @@ transform:translateX(-50%);
 #content{
 margin-top:40px;
 }
+
+.timelineTop{
+width:100%;
+display:flex;
+align-items:center;
+justify-content:space-between;
+
+padding:0 15px;
+box-sizing:border-box;
+}
+
+.timelineSpacer{
+width:80px;
+}
       
 </style>
 </head>
@@ -318,18 +328,17 @@ margin-top:40px;
 
 <div id="timeline">
 
-<div id="yearLabel">1925</div>
+<div class="timelineTop">
 
 <div id="backBtn">← Назад</div>
 
+<div id="yearLabel">1925</div>
+
+<div class="timelineSpacer"></div>
+
+</div>
+
 <div id="timelineBar">
-
-<div id="timelineProgress"></div>
-<div id="timelineDot"></div>
-
-</div>
-
-</div>
 
 <div id="content">
 
