@@ -148,6 +148,51 @@ html, body {
   background: rgba(255,255,255,0.15);
   border-radius: 8px;
 }
+
+#backBtn {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  font-size: 18px;
+  cursor: pointer;
+  padding: 10px 14px;
+  background: rgba(255,255,255,0.15);
+  border-radius: 8px;
+}
+
+/* ===== Заголовок ===== */
+.modalTitle{
+  font-size: 32px;
+  margin-bottom: 40px;
+}
+
+/* ===== Блок фото ===== */
+.modalImageBlock{
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* ===== Фото ===== */
+.modalImage{
+  width: 100%;
+  max-width: 420px;
+  height: auto;
+  object-fit: contain;
+  border-radius: 12px;
+}
+
+/* ===== Подпись ===== */
+.modalCaption{
+  margin-top: 14px;
+  font-size: 16px;
+  opacity: 0.8;
+  max-width: 420px;
+  text-align: center;
+  line-height: 1.4;
+}
+      
 </style>
 </head>
 
@@ -244,9 +289,6 @@ target1.addEventListener("targetFound", () => {
   arUI.style.display = "flex";
   anchor1.setAttribute("ui-follow", "");
 
-  document.querySelector("#modal h2").innerText = "Экспонат 1925 года";
-  document.querySelector("#modal p").innerText =
-    "Описание первого экспоната. Исторические факты и информация.";
 });
 
 target1.addEventListener("targetLost", () => {
