@@ -13,6 +13,7 @@
 
 <style>
 html, body {
+      overflow-x:hidden;
   margin: 0;
   padding: 0;
   overflow: hidden;
@@ -136,17 +137,8 @@ html, body {
   z-index: 20;
   padding: 100px 30px 30px 30px; /* 👈 ВАЖНО */
   box-sizing: border-box;
-}
-
-#backBtn {
-  position: absolute;
-  top: 20px;
-  left: 20px;
-  font-size: 18px;
-  cursor: pointer;
-  padding: 10px 14px;
-  background: rgba(255,255,255,0.15);
-  border-radius: 8px;
+      overflow-y:auto;
+overflow-x:hidden;
 }
 
 #backBtn {
@@ -265,6 +257,14 @@ transform:translateX(-50%);
 
 <body>
 
+<div id="arUI">
+  <div class="circle"></div>
+  <div class="line"></div>
+  <div class="card" id="openCard">Краткая информация</div>
+</div>
+
+<div id="modal">
+
 <div id="timeline">
 
 <div id="yearLabel">1925</div>
@@ -276,27 +276,10 @@ transform:translateX(-50%);
 
 </div>
 
-<div id="arUI">
-  <div class="circle"></div>
-  <div class="line"></div>
-  <div class="card" id="openCard">Краткая информация</div>
-</div>
-
-<div id="modal">
-
-  <div id="backBtn">← Назад</div>
-
-  <h1 class="modalTitle">Хронология КВПК</h1>
-
-  <div class="modalImageBlock">
-      <img src="photo1925.jpg" class="modalImage">
-      <div class="modalCaption">
-        Студенты педагогического техникума 1925 года
-      </div>
-  </div>
+<div id="backBtn">← Назад</div>
 
 </div>
-
+      
 <a-scene
   embedded
   mindar-image="imageTargetSrc: targets.mind;"
@@ -318,20 +301,29 @@ transform:translateX(-50%);
 </a-scene>
 
 <script>
-
-const startYear = 1925;
-const endYear = 2023;
+    
+document.addEventListener("DOMContentLoaded", function() {
 
 const dot = document.getElementById("timelineDot");
 const progress = document.getElementById("timelineProgress");
 const yearLabel = document.getElementById("yearLabel");
+const arUI = document.getElementById("arUI");
+const camera = document.getElementById("camera");
+const modal = document.getElementById("modal");
+const openCard = document.getElementById("openCard");
+const backBtn = document.getElementById("backBtn");
 
-window.addEventListener("scroll", ()=>{
+const startYear = 1925;
+const endYear = 2023;
 
-const scrollTop = window.scrollY;
-const maxScroll = document.body.scrollHeight - window.innerHeight;
+modal.addEventListener("scroll", ()=>{
 
-const percent = scrollTop / maxScroll;
+const scrollTop = modal.scrollTop;
+const maxScroll = modal.scrollHeight - modal.clientHeight;
+
+let percent = scrollTop / maxScroll;
+
+if(!isFinite(percent)) percent = 0;
 
 const year = Math.round(startYear + percent * (endYear - startYear));
 
@@ -341,14 +333,6 @@ dot.style.left = percent * 100 + "%";
 progress.style.width = percent * 100 + "%";
 
 });
-      
-document.addEventListener("DOMContentLoaded", function() {
-
-const arUI = document.getElementById("arUI");
-const camera = document.getElementById("camera");
-const modal = document.getElementById("modal");
-const openCard = document.getElementById("openCard");
-const backBtn = document.getElementById("backBtn");
 
 // Два таргета
 const target1 = document.getElementById("target1");
