@@ -407,6 +407,19 @@ width:80px;
 <p>Алғашқы бастауыш сынып мұғалімдері оқуын аяқтады.</p>
 </div>
 
+<div class="yearBlock" data-year="1970">
+
+<h2>1970</h2>
+
+<img src="Building1970.jpg" class="modalImage">
+
+<p>
+1963 жылы педагогикалық училищеде мектепке дейінгі бөлім ашылды.
+Директор болып Римма Павловна Серова тағайындалды.
+</p>
+
+</div>
+
 <div class="yearBlock" data-year="1981">
 <h2>1981</h2>
 <p>Колледж жаңа оқу корпусына көшті.</p>
@@ -452,6 +465,11 @@ width:80px;
       <a-entity id="target2" mindar-image-target="targetIndex: 1">
         <a-entity id="anchor2" position="0 -0.4 0"></a-entity>
       </a-entity>
+
+      <!-- Экспонат 3 -->
+<a-entity id="target3" mindar-image-target="targetIndex: 2">
+  <a-entity id="anchor3" position="0 -0.4 0"></a-entity>
+</a-entity>
 
 </a-scene>
 
@@ -504,9 +522,11 @@ progress.style.width = percent * 100 + "%";
 // Два таргета
 const target1 = document.getElementById("target1");
 const target2 = document.getElementById("target2");
+const target3 = document.getElementById("target3");
 
 const anchor1 = document.getElementById("anchor1");
 const anchor2 = document.getElementById("anchor2");
+const anchor3 = document.getElementById("anchor3");
 
 let activeAnchor = null;
 let startYear = null;
@@ -572,6 +592,29 @@ target2.addEventListener("targetLost", () => {
   isTracking = false;
   arUI.style.display = "none";
   anchor2.removeAttribute("ui-follow");
+});
+
+/* ===================== */
+/* TARGET 3 */
+/* ===================== */
+
+target3.addEventListener("targetFound", () => {
+
+activeAnchor = anchor3;
+isTracking = true;
+
+arUI.style.display = "flex";
+anchor3.setAttribute("ui-follow", "");
+
+/* год для таймлайна */
+startYear = 1963;
+
+});
+
+target3.addEventListener("targetLost", () => {
+isTracking = false;
+arUI.style.display = "none";
+anchor3.removeAttribute("ui-follow");
 });
 
 /* ===================== */
