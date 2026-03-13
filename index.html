@@ -376,6 +376,8 @@ width:80px;
 
 <h1 class="modalTitle">Хронология КВПК</h1>
 
+<div class="yearBlock" data-year="1925">
+	
 <h2>1925</h2>
       
 <div class="modalImageBlock">
@@ -476,6 +478,11 @@ width:80px;
   <a-entity id="anchor3" position="0 -0.4 0"></a-entity>
 </a-entity>
 
+	<!-- Экспонат 4 -->
+<a-entity id="target4" mindar-image-target="targetIndex: 3">
+  <a-entity id="anchor4" position="0 -0.4 0"></a-entity>
+</a-entity>
+
 </a-scene>
 
 <script>
@@ -528,10 +535,12 @@ progress.style.width = percent * 100 + "%";
 const target1 = document.getElementById("target1");
 const target2 = document.getElementById("target2");
 const target3 = document.getElementById("target3");
+const target4 = document.getElementById("target4");
 
 const anchor1 = document.getElementById("anchor1");
 const anchor2 = document.getElementById("anchor2");
 const anchor3 = document.getElementById("anchor3");
+const anchor4 = document.getElementById("anchor4");
 
 let activeAnchor = null;
 let startYear = null;
@@ -620,6 +629,28 @@ target3.addEventListener("targetLost", () => {
 isTracking = false;
 arUI.style.display = "none";
 anchor3.removeAttribute("ui-follow");
+});
+
+/* ===================== */
+/* TARGET 4 */
+/* ===================== */
+
+target4.addEventListener("targetFound", () => {
+
+activeAnchor = anchor4;
+isTracking = true;
+
+arUI.style.display = "flex";
+anchor4.setAttribute("ui-follow", "");
+
+startYear = 1943;
+
+});
+
+target4.addEventListener("targetLost", () => {
+isTracking = false;
+arUI.style.display = "none";
+anchor4.removeAttribute("ui-follow");
 });
 
 /* ===================== */
