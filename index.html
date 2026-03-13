@@ -509,6 +509,7 @@ const anchor1 = document.getElementById("anchor1");
 const anchor2 = document.getElementById("anchor2");
 
 let activeAnchor = null;
+let startYear = null;
 let isTracking = false;
 
 /* ===================== */
@@ -562,10 +563,7 @@ isTracking = true;
 arUI.style.display = "flex";
 anchor2.setAttribute("ui-follow", "");
 
-setTimeout(()=>{
-const block = document.querySelector('[data-year="1963"]');
-block.scrollIntoView({behavior:"instant", block:"center"});
-},300);
+startYear = 1963;
 
 });
 
@@ -586,6 +584,16 @@ openCard.addEventListener("click", () => {
 
   document.getElementById("timeline").style.display = "flex";
 
+      setTimeout(()=>{
+
+if(startYear){
+
+const block = document.querySelector('[data-year="'+startYear+'"]');
+block.scrollIntoView({behavior:"instant", block:"center"});
+
+}
+
+},200);
 });
 
 backBtn.addEventListener("click", () => {
