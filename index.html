@@ -389,6 +389,19 @@ width:80px;
 <p>Костанай педагогикалық училищесі Боровое ауылына көшірілді.</p>
 </div>
 
+<div class="yearBlock" data-year="1963">
+
+<h2>1963</h2>
+
+<img src="Prikaz1963.jpg" class="modalImage">
+
+<p>
+Қостанай қаласында педагогикалық училищені ұйымдастыру туралы
+Қазақ КСР Министрлер Кеңесінің 1963 жылғы қаулысы.
+</p>
+
+</div>
+
 <div class="yearBlock" data-year="1967">
 <h2>1967</h2>
 <p>Алғашқы бастауыш сынып мұғалімдері оқуын аяқтады.</p>
@@ -542,15 +555,18 @@ target1.addEventListener("targetLost", () => {
 /* ===================== */
 
 target2.addEventListener("targetFound", () => {
-  activeAnchor = anchor2;
-  isTracking = true;
 
-  arUI.style.display = "flex";
-  anchor2.setAttribute("ui-follow", "");
+activeAnchor = anchor2;
+isTracking = true;
 
-  document.querySelector("#modal h2").innerText = "Экспонат 1930 года";
-  document.querySelector("#modal p").innerText =
-    "Описание второго экспоната. Дополнительные исторические данные.";
+arUI.style.display = "flex";
+anchor2.setAttribute("ui-follow", "");
+
+setTimeout(()=>{
+const block = document.querySelector('[data-year="1963"]');
+block.scrollIntoView({behavior:"instant", block:"center"});
+},300);
+
 });
 
 target2.addEventListener("targetLost", () => {
