@@ -1054,6 +1054,10 @@ data-ru="Новые достижения и проекты колледжа.">
   <a-entity id="anchor8" position="0 -0.4 0"></a-entity>
 </a-entity>
 
+<a-entity id="target9" mindar-image-target="targetIndex: 8">
+  <a-entity id="anchor9" position="0 -0.4 0"></a-entity>
+</a-entity>
+	
 </a-scene>
 
 <script>
@@ -1145,6 +1149,7 @@ const target5 = document.getElementById("target5");
 const target6 = document.getElementById("target6");
 const target7 = document.getElementById("target7");
 const target8 = document.getElementById("target8");
+const target9 = document.getElementById("target9");
 
 const anchor1 = document.getElementById("anchor1");
 const anchor2 = document.getElementById("anchor2");
@@ -1153,7 +1158,7 @@ const anchor4 = document.getElementById("anchor4");
 const anchor5 = document.getElementById("anchor5");
 const anchor6 = document.getElementById("anchor6");
 const anchor7 = document.getElementById("anchor7");
-const anchor8 = document.getElementById("anchor8");
+const anchor9 = document.getElementById("anchor9");
 
 let activeAnchor = null;
 let startYear = null;
@@ -1342,6 +1347,24 @@ arUI.style.display = "none";
 anchor8.removeAttribute("ui-follow");
 });
 
+target9.addEventListener("targetFound", () => {
+
+activeAnchor = anchor8;
+isTracking = true;
+
+arUI.style.display = "flex";
+anchor9.setAttribute("ui-follow", "");
+
+startYear = 1997;
+
+});
+
+target9.addEventListener("targetLost", () => {
+isTracking = false;
+arUI.style.display = "none";
+anchor9.removeAttribute("ui-follow");
+});
+	
 /* ===================== */
 /* UI */
 /* ===================== */
